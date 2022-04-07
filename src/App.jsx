@@ -1,6 +1,7 @@
 import * as THREE from "three";
-import { useRef, useState } from "react";
+import { Suspense, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useGLTF, Environment  } from "@react-three/drei"
 
 function Box({ z }) {
   const ref = useRef();
@@ -27,12 +28,21 @@ function Box({ z }) {
   );
 }
 
+function Apple(){
+  const { scene } = useGLTF("/apple.glb")
+  return <primitive object={scene} />
+}
+
 export default function App({ count = 100 }) {
   return (
     <Canvas>
-      {Array.from({ length: count }, (_, i) => (
+      <Suspense fallback={null}>
+        <Apple scale={0.5}/>
+        <Environment preset="sunset" />
+      </Suspense>
+      {/* {Array.from({ length: count }, (_, i) => (
         <Box key={i} z={-i} />
-      ))}
+      ))} */}
     </Canvas>
   );
 }
